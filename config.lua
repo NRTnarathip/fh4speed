@@ -1,9 +1,9 @@
 Config = {}
-Config.ToggleHUD= {
+Config.ToggleHUD = {
     canToggleHUD = true,
     commandName = 'fh4speed'
 }
-Config.UnitSpeed ={
+Config.UnitSpeed = {
     commandName = 'fh4unit', 
-    unitInit = "MPH" -- KPH,MPH
+    useMetric = true
 }

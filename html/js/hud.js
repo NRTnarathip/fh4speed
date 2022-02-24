@@ -13,7 +13,7 @@ var o_rpm;
 var hasFilter = false;
 var OverLoadRPM = false;
 var IsOverLoad = false;
-var unitSpeed = "KPH"
+var isUseMetric = true
 
 $(function () {
 	window.addEventListener("message", function (event) {
@@ -32,7 +32,7 @@ $(function () {
 			s_LS_h = item.CurrentCarLS_h;
 
 			CalcSpeed = s_Speed * 3.6;
-			if (unitSpeed == "MPH") {
+			if (!isUseMetric) {
 				CalcSpeed = s_Speed * 2.236936
 			}
 
@@ -110,9 +110,14 @@ $(function () {
 				$("#container").fadeOut(250);
 			}
 		}
-		else if (type == "updateUnitSpeed") {
-			unitSpeed = item.UnitSpeed
-			$(".unitdisplay").html(unitSpeed);
+		else if (type == "setUnitMetric") {
+			isUseMetric = item.isUseMetric
+			if (isUseMetric) {
+				$(".unitdisplay").html("KP/H");
+			}
+			else {
+				$(".unitdisplay").html("MP/H");
+			}
 		}
 	});
 

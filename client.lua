@@ -4,38 +4,52 @@
 
 local isShowHUD = false
 local activeHUD = true
-
+local isInitial = false
+local isUseMetric = true
 local carRPM, carSpeed, carGear, carIL, carAcceleration, carHandbrake, carBrakeABS, carLS_r, carLS_o, carLS_h
-RegisterNetEvent('esx:playerLoaded')
-AddEventHandler('esx:playerLoaded', function(playerData)
-	TriggerEvent('fh4speed:setUnitSpeed', Config.UnitSpeed['unitInit'])
-end)
 
-RegisterNetEvent('fh4speed:setUnitSpeed')
-AddEventHandler('fh4speed:setUnitSpeed',function(unitString)
-	local unit = unitString:lower()
-	if(unit == 'kph') then
-		print("Set Unit To KPH")
-		unit = "KPH"
-	elseif (unit == 'mph') then
-		print("Set Unit To MPH")
-		unit = "MPH"
-	else 
-		print("Should Select Unit KPH Or MPH")
-		return
-	end
-	SendNUIMessage({
-		Type = 'updateUnitSpeed',
-		UnitSpeed = unit
+RegisterNetEvent('fh4speed:setUnitMetric')
+AddEventHandler('fh4speed:setUnitMetric',function(isMetric)
+	isUseMetric = isMetric
+	Wait(10)
+	print("set unit metric")
+	SendNUIMessage({ 
+		Type = "setUnitMetric",
+		isUseMetric = isMetric,
 	})
 end)
 
-RegisterNetEvent('fh4speed:toggleHUD')
-AddEventHandler('fh4speed:toggleHUD',function()
-	ToggleDisplay()
-end)
+if(Config.ToggleHUD['canToggleHUD']) then
+	RegisterNetEvent('fh4speed:toggleHUD')
+	AddEventHandler('fh4speed:toggleHUD',function()
+		ToggleDisplay()
+	end)
 
+	function ToggleDisplay()
+		activeHUD = not activeHUD
+		print("fh4speed active HUD:",activeHUD)
+		if(activeHUD) then
+			RefreshHUD()
+		else
+			SendNUIMessage({ 
+				Type = "toggleHUD",
+				isShowHUD = false,
+			})
+		end
+	end
+end
+
+
+function Initial()
+	local configUseMeric = Config.UnitSpeed['useMetric']
+	TriggerEvent('fh4speed:setUnitMetric', configUseMeric)
+	isInitial=true
+end
 CreateThread(function()
+	if(not isInitial) then
+		Initial()
+	end
+
 	while true do
 		Wait(0)
 		if(activeHUD) then
@@ -98,18 +112,7 @@ function Tick()
 	end
 end
 
-function ToggleDisplay()
-	activeHUD = not activeHUD
-	print("fh4speed active HUD:",activeHUD)
-	if(activeHUD) then
-		RefreshHUD()
-	else
-		SendNUIMessage({ 
-			Type = "toggleHUD",
-			isShowHUD = false,
-		})
-	end
-end
+
 
 function RefreshHUD()
 	SendNUIMessage({ 
