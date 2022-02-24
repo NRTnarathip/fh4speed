@@ -11,8 +11,6 @@ local carRPM, carSpeed, carGear, carIL, carAcceleration, carHandbrake, carBrakeA
 RegisterNetEvent('fh4speed:setUnitMetric')
 AddEventHandler('fh4speed:setUnitMetric',function(isMetric)
 	isUseMetric = isMetric
-	Wait(10)
-	print("set unit metric")
 	SendNUIMessage({ 
 		Type = "setUnitMetric",
 		isUseMetric = isMetric,
@@ -20,6 +18,7 @@ AddEventHandler('fh4speed:setUnitMetric',function(isMetric)
 end)
 
 if(Config.ToggleHUD['canToggleHUD']) then
+
 	RegisterNetEvent('fh4speed:toggleHUD')
 	AddEventHandler('fh4speed:toggleHUD',function()
 		ToggleDisplay()
@@ -39,13 +38,13 @@ if(Config.ToggleHUD['canToggleHUD']) then
 	end
 end
 
-
 function Initial()
 	local configUseMeric = Config.UnitSpeed['useMetric']
 	TriggerEvent('fh4speed:setUnitMetric', configUseMeric)
 	isInitial=true
 end
 CreateThread(function()
+	Wait(0)
 	if(not isInitial) then
 		Initial()
 	end
@@ -107,12 +106,12 @@ function Tick()
 		end
 	end
 	if(isShouldShowHUD ~= isShowHUD) then
+		print("On refresh HUD")
+		print(isShouldShowHUD)
 		isShowHUD = isShouldShowHUD
 		RefreshHUD()
 	end
 end
-
-
 
 function RefreshHUD()
 	SendNUIMessage({ 

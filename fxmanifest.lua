@@ -2,10 +2,13 @@ fx_version 'cerulean'
 game 'gta5'
 
 description "Forza Horizon 4 Speedometer"
-author "Akkariin"
+author "Akkariin" -- NRTnarathip Fork from this author
 url "https://www.zerodream.net/"
 
-shared_script '@es_extended/imports.lua'
+shared_scripts  {
+	'@es_extended/imports.lua',
+	'config.lua',
+}
 
 ui_page "html/hud.html"
 
@@ -28,10 +31,8 @@ files {
 }
 
 client_scripts {
-	"config.lua",
 	"client.lua"
 } 
 server_scripts {
-	"config.lua",
 	"server.lua"
 }
